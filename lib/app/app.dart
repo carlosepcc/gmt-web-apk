@@ -24,8 +24,8 @@ class App extends HookWidget {
             if (vRedirector.historyCanBack()) vRedirector.historyBack();
           },
           stackedRoutes: [
-            VWidget(path: "/", widget: const Frame(child: Home())),
-            VWidget(path: "/home", widget: const Frame(child: Home())),
+            VWidget(path: "/", widget: Frame(child: const Home())),
+            VWidget(path: "/home", widget: Frame(child: const Home())),
             VWidget(path: "/unknown", widget: const Error404()),
             VRouteRedirector(path: "*", redirectTo: "/unknown")
           ]),
