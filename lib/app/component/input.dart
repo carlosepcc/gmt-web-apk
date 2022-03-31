@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class InputError {
@@ -17,16 +18,17 @@ class InputData {
 }
 
 class InputPassword extends HookWidget {
-  InputPassword({Key? key, required this.controller}) : super(key: key);
+  InputPassword({Key? key, required this.controller, this.onEnterPress}) : super(key: key);
 
   final ValueNotifier<InputData> controller;
+  final VoidCallback? onEnterPress;
 
   final showPassword = useState<bool>(true);
   final error = useState<InputError>(InputError(message: "No puede estar vacío"));
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       obscureText: showPassword.value,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
@@ -43,6 +45,9 @@ class InputPassword extends HookWidget {
             }),
       ),
       onChanged: validate,
+      onFieldSubmitted: (text) {
+        onEnterPress!();
+      },
     );
   }
 
@@ -68,7 +73,11 @@ class InputUsername extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        keyboardType: TextInputType.name, decoration: InputDecoration(labelText: "Usuario", errorText: error.value.message), onChanged: validate);
+      autofocus: true,
+      keyboardType: TextInputType.name,
+      decoration: InputDecoration(labelText: "Usuario", errorText: error.value.message),
+      onChanged: validate,
+    );
   }
 
   void validate(String value) {
