@@ -2,6 +2,7 @@
 import "dart:html";
 
 import 'package:dio/dio.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Axios {
@@ -14,6 +15,9 @@ class Axios {
       final prefs = await SharedPreferences.getInstance();
       String? jwt = prefs.getString("jwt");
       if (jwt != null) {
+        if (JwtDecoder.isExpired(jwt)) {
+          throw Exception("Token expired");
+        }
         return await _dio.post(path, data: data, options: Options(headers: {"Authorization": jwt}));
       }
     }

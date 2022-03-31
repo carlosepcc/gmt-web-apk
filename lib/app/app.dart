@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt/app/component/frame.dart';
 import 'package:gmt/app/page/error404.dart';
 import 'package:gmt/app/page/home.dart';
+import 'package:gmt/app/page/option.dart';
 import 'package:gmt/app/store/session/session.dart';
 import 'package:provider/provider.dart';
 import 'package:vrouter/vrouter.dart';
@@ -26,6 +27,7 @@ class App extends HookWidget {
           stackedRoutes: [
             VWidget(path: "/", widget: Frame(child: const Home())),
             VWidget(path: "/home", widget: Frame(child: const Home())),
+            VWidget(path: "/options", widget: Frame(child: const Option())),
             VWidget(path: "/unknown", widget: const Error404()),
             VRouteRedirector(path: "*", redirectTo: "/unknown")
           ]),

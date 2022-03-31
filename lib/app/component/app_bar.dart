@@ -34,7 +34,7 @@ class AppBarVertical extends StatelessWidget {
       child: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.only(top: 10, bottom: 30),
+            padding: EdgeInsets.only(top: 10, bottom: 50),
             child: SelectableText(
               "GMT",
               textScaleFactor: 3,
@@ -44,15 +44,27 @@ class AppBarVertical extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  child: _ButtonVerticalAppBar(
+                    icon: Icons.pie_chart,
+                    text: "Resumen",
+                    selected: url == "/home" || url == "/",
+                    tooltip: "Resumen",
+                    onPressed: () {
+                      context.vRouter.to("/home");
+                    },
+                  ),
+                ),
                 _ButtonVerticalAppBar(
-                  icon: Icons.pie_chart,
-                  text: "Resumen",
-                  selected: url == "/home" || url == "/",
-                  tooltip: "Resumen",
+                  icon: Icons.settings,
+                  text: "Opciones",
+                  selected: url == "/options",
+                  tooltip: "Opciones",
                   onPressed: () {
-                    context.vRouter.to("/home");
+                    context.vRouter.to("/options");
                   },
-                )
+                ),
               ],
             ),
           )
