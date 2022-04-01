@@ -6,7 +6,7 @@ class AppBarHorizontal extends AppBar {
   AppBarHorizontal(Session session, {Key? key})
       : super(
             key: key,
-            title: const Text("GMT"),
+            title: Text("GMT"),
             toolbarHeight: 50,
             actions: [
               PopupMenuButton(
@@ -14,7 +14,7 @@ class AppBarHorizontal extends AppBar {
                   child: CircleAvatar(child: Text(session.username[0].toUpperCase())),
                   itemBuilder: (context) => [
                         PopupMenuItem(
-                          child: const Text("Salir"),
+                          child: Text("Salir"),
                           onTap: session.logout,
                         )
                       ])
@@ -23,17 +23,17 @@ class AppBarHorizontal extends AppBar {
 }
 
 class AppBarVertical extends StatelessWidget {
-  const AppBarVertical({Key? key}) : super(key: key);
+  AppBarVertical({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final url = context.vRouter.url;
     return Container(
-      decoration: const BoxDecoration(color: Colors.lightBlue, border: Border(right: BorderSide(width: 0.2))),
+      decoration: BoxDecoration(color: Colors.lightBlue, border: Border(right: BorderSide(width: 0.2))),
       width: 150,
       child: Column(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 10, bottom: 50),
             child: SelectableText(
               "GMT",
@@ -45,7 +45,7 @@ class AppBarVertical extends StatelessWidget {
             child: ListView(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: EdgeInsets.only(bottom: 15),
                   child: _ButtonVerticalAppBar(
                     icon: Icons.pie_chart,
                     text: "Resumen",
@@ -55,6 +55,15 @@ class AppBarVertical extends StatelessWidget {
                       context.vRouter.to("/home");
                     },
                   ),
+                ),
+                _ButtonVerticalAppBar(
+                  icon: Icons.store_mall_directory_outlined,
+                  text: "Locales",
+                  selected: url == "/local",
+                  tooltip: "Locales",
+                  onPressed: () {
+                    context.vRouter.to("/local");
+                  },
                 ),
                 _ButtonVerticalAppBar(
                   icon: Icons.settings,
@@ -75,7 +84,7 @@ class AppBarVertical extends StatelessWidget {
 }
 
 class _ButtonVerticalAppBar extends StatelessWidget {
-  const _ButtonVerticalAppBar({required this.onPressed, this.selected = false, required this.icon, required this.text, this.tooltip});
+  _ButtonVerticalAppBar({required this.onPressed, this.selected = false, required this.icon, required this.text, this.tooltip});
 
   final VoidCallback onPressed;
   final bool selected;
@@ -95,7 +104,7 @@ class _ButtonVerticalAppBar extends StatelessWidget {
             Icon(icon, size: 30, color: selected ? Colors.white : Colors.white54),
           if (selected)
             Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 10),
               child: Text(
                 text.toUpperCase(),
                 textScaleFactor: 1.3,
@@ -106,7 +115,7 @@ class _ButtonVerticalAppBar extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
         elevation: MaterialStateProperty.all(0),
-        minimumSize: MaterialStateProperty.all(const Size(90, 90)),
+        minimumSize: MaterialStateProperty.all(Size(90, 90)),
       ),
     );
   }

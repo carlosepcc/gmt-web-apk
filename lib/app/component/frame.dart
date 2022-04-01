@@ -34,7 +34,7 @@ class Frame extends HookWidget {
   }
 
   List<Widget> children(List<Widget> children) {
-    if (typeAppBar.value == TyPeAppBar.vertical) children.insert(0, const AppBarVertical());
+    if (typeAppBar.value == TyPeAppBar.vertical) children.insert(0, AppBarVertical());
     return children;
   }
 }

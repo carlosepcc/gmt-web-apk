@@ -5,5 +5,5 @@ import 'package:provider/provider.dart';
 
 void main() => runApp(MultiProvider(
       providers: [Provider<Session>(create: (_) => Session())],
-      child: const App(),
+      child: App(),
     ));
