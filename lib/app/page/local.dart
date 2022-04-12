@@ -7,7 +7,7 @@ class Local extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: Center(
-      child: Text("Aquí ba el contenido"),
+      child: Text("Aquí va el contenido"),
     ));
   }
 }
