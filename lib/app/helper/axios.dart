@@ -23,4 +23,18 @@ class Axios {
     }
     return await _dio.post(path, data: data);
   }
+
+  get<T>({required String path, bool authorization = true}) async {
+    if (authorization) {
+      final prefs = await SharedPreferences.getInstance();
+      String? jwt = prefs.getString("jwt");
+      if (jwt != null) {
+        if (JwtDecoder.isExpired(jwt)) {
+          throw Exception("Token expired");
+        }
+        return await _dio.get<T>(path, options: Options(headers: {"Authorization": jwt}));
+      }
+    }
+    return await _dio.get<T>(path);
+  }
 }

@@ -43,7 +43,9 @@ abstract class _Session with Store {
       Response response = await _axios.post(path: "/login", data: {"username": username, "password": password}, authorization: false);
       init(token: response.data as String);
     } on DioError catch (e) {
-      MySnackBar(context: context, message: e.response?.data["message"], type: TypeSnackBar.error).showSnackBar();
+      if (e.type == DioErrorType.response) {
+        MySnackBar(context: context, message: e.response?.data["message"] ?? "Error de Conexión", type: TypeSnackBar.error).showSnackBar();
+      }
     }
   }
 

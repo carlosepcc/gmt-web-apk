@@ -35,8 +35,6 @@ class MySnackBar {
         ],
       ),
       backgroundColor: color,
-      width: (message.length as double) + 200,
-      behavior: SnackBarBehavior.floating,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
