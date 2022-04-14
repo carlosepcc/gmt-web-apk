@@ -5,7 +5,7 @@ import 'package:gmt/app/store/session/session.dart';
 import 'package:provider/provider.dart';
 
 class Login extends HookWidget {
-  const Login({Key? key}) : super(key: key);
+  Login({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +13,19 @@ class Login extends HookWidget {
 
     var username = useState<InputData>(InputData(error: true));
     var password = useState<InputData>(InputData(error: true));
+    var circularProgressIndicator = useState<bool>(false);
+
+    VoidCallback? submit() {
+      if (!username.value.error && !password.value.error) {
+        return () {
+          session.login(username: username.value.value, password: password.value.value, context: context).then((value) {
+            if (!value) circularProgressIndicator.value = false;
+          });
+          circularProgressIndicator.value = true;
+        };
+      }
+      return null;
+    }
 
     return Scaffold(
       body: SizedBox(
@@ -27,27 +40,25 @@ class Login extends HookWidget {
                 children: [
                   Container(
                       height: 70,
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
-                      margin: const EdgeInsets.only(top: 30, bottom: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      margin: EdgeInsets.only(top: 30, bottom: 5),
                       child: InputUsername(
                         controller: username,
                       )),
                   Container(
-                      height: 70,
-                      padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: InputPassword(
-                        controller: password,
-                        onEnterPress: !username.value.error && !password.value.error
-                            ? () => session.login(username: username.value.value, password: password.value.value, context: context)
-                            : null,
-                      )),
+                      height: 70, padding: EdgeInsets.symmetric(horizontal: 50), child: InputPassword(controller: password, onEnterPress: submit())),
                   Padding(
-                    padding: const EdgeInsets.only(left: 50, right: 50, top: 30),
+                    padding: EdgeInsets.only(left: 50, right: 50, top: 30),
                     child: ElevatedButton(
-                        onPressed: !username.value.error && !password.value.error
-                            ? () => session.login(username: username.value.value, password: password.value.value, context: context)
-                            : null,
-                        child: const Text("Entrar")),
+                        onPressed: !circularProgressIndicator.value ? submit() : null,
+                        child: !circularProgressIndicator.value
+                            ? Text("Entrar")
+                            : SizedBox(
+                                height: 23,
+                                width: 23,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 3,
+                                ))),
                   )
                 ],
               ),

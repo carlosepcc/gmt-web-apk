@@ -38,15 +38,17 @@ abstract class _Session with Store {
     if (jwt != null) username = JwtDecoder.decode(jwt as String)["sub"];
   }
 
-  login({required String username, required String password, required BuildContext context}) async {
+  Future<bool> login({required String username, required String password, required BuildContext context}) async {
     try {
       Response response = await _axios.post(path: "/login", data: {"username": username, "password": password}, authorization: false);
       init(token: response.data as String);
     } on DioError catch (e) {
       if (e.type == DioErrorType.response) {
         MySnackBar(context: context, message: e.response?.data["message"] ?? "Error de Conexión", type: TypeSnackBar.error).showSnackBar();
+        return false;
       }
     }
+    return true;
   }
 
   logout() async {

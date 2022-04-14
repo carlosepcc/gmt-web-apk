@@ -76,7 +76,7 @@ class Error404 extends StatelessWidget {
           ),
         );
       }
-      return const Login();
+      return Login();
     });
   }
 }
