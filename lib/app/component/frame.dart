@@ -14,11 +14,11 @@ class Frame extends HookWidget {
   Frame({Key? key, required this.child}) : super(key: key);
   final Widget child;
 
-  final typeAppBar = useState<TyPeAppBar>(TyPeAppBar.vertical);
-
   @override
   Widget build(BuildContext context) {
     final session = Provider.of<Session>(context);
+    final typeAppBar = useState<TyPeAppBar>(TyPeAppBar.vertical);
+
     return Material(
       child: Observer(builder: (_) {
         if (session.isInSession) {

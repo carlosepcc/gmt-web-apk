@@ -8,6 +8,7 @@ class FloatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buttonState = Provider.of<FloatButtonStore>(context);
+
     switch (buttonState.state) {
       case (FloatButtonState.add):
         return FloatingActionButton(

@@ -27,6 +27,7 @@ class Local extends HookWidget {
   Widget build(BuildContext context) {
     final store = Provider.of<LocalStore>(context);
     final floatButton = Provider.of<FloatButtonStore>(context);
+
     final numberC = useState<InputData>(InputData(value: "", error: false));
 
     var showFormDialog = showFormAddDialog(context, addFunction: store.list, children: [
