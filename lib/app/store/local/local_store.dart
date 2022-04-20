@@ -13,7 +13,7 @@ abstract class _LocalStore with Store {
   final Axios _axios = Axios();
 
   @observable
-  List<Local> locales = [];
+  List<Local>? locales;
 
   @action
   Future<bool> list({required BuildContext context}) async {

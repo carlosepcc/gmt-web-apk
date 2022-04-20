@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class InputError {
@@ -75,6 +76,42 @@ class InputUsername extends HookWidget {
       autofocus: true,
       keyboardType: TextInputType.name,
       decoration: InputDecoration(labelText: "Usuario", errorText: error.value.message),
+      onChanged: validate,
+    );
+  }
+
+  void validate(String value) {
+    if (value.isEmpty) {
+      error.value = InputError(message: "No puede estar vacío");
+    } else if (_numbers.hasMatch(value[0])) {
+      error.value = InputError(message: "No puede comenzar con un numero");
+    } else if (_lettersUppercase.hasMatch(value)) {
+      error.value = InputError(message: "No puede contener mayúsculas");
+    } else if (value.length < 4) {
+      error.value = InputError(message: "Tamaño no valido");
+    } else if (_specialCharacters.hasMatch(value)) {
+      error.value = InputError(message: "Contiene letras no valido");
+    } else {
+      error.value = InputError();
+    }
+    controller.value = InputData(value: value, error: error.value.isInError());
+  }
+}
+
+class InputNumber extends HookWidget {
+  InputNumber({Key? key, required this.controller}) : super(key: key);
+
+  final ValueNotifier<InputData> controller;
+
+  final error = useState<InputError>(InputError(message: "No puede estar vacío"));
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      autofocus: true,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(labelText: "Numero", errorText: error.value.message),
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onChanged: validate,
     );
   }

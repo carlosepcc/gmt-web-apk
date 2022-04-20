@@ -12,13 +12,13 @@ mixin _$LocalStore on _LocalStore, Store {
   final _$localesAtom = Atom(name: '_LocalStore.locales');
 
   @override
-  List<Local> get locales {
+  List<Local>? get locales {
     _$localesAtom.reportRead();
     return super.locales;
   }
 
   @override
-  set locales(List<Local> value) {
+  set locales(List<Local>? value) {
     _$localesAtom.reportWrite(value, super.locales, () {
       super.locales = value;
     });
