@@ -18,9 +18,9 @@ class InputData {
 }
 
 class InputPassword extends HookWidget {
-  InputPassword({Key? key, required this.controller, this.onEnterPress}) : super(key: key);
+  InputPassword({Key? key, this.onChange, this.onEnterPress}) : super(key: key);
 
-  final ValueNotifier<InputData> controller;
+  final Function(InputData inputData)? onChange;
   final VoidCallback? onEnterPress;
 
   @override
@@ -36,7 +36,7 @@ class InputPassword extends HookWidget {
       } else {
         error.value = InputError();
       }
-      controller.value = InputData(value: value, error: error.value.isInError());
+      onChange!(InputData(value: value, error: error.value.isInError()));
     }
 
     return TextFormField(
@@ -64,9 +64,9 @@ class InputPassword extends HookWidget {
 }
 
 class InputUsername extends HookWidget {
-  InputUsername({Key? key, required this.controller}) : super(key: key);
+  InputUsername({Key? key, this.onChange}) : super(key: key);
 
-  final ValueNotifier<InputData> controller;
+  final Function(InputData inputData)? onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class InputUsername extends HookWidget {
       } else {
         error.value = InputError();
       }
-      controller.value = InputData(value: value, error: error.value.isInError());
+      onChange!(InputData(value: value, error: error.value.isInError()));
     }
 
     return TextFormField(
@@ -99,9 +99,9 @@ class InputUsername extends HookWidget {
 }
 
 class InputNumber extends HookWidget {
-  InputNumber({Key? key, required this.controller}) : super(key: key);
+  InputNumber({Key? key, this.onChange}) : super(key: key);
 
-  final ValueNotifier<InputData> controller;
+  final Function(InputData inputData)? onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class InputNumber extends HookWidget {
       } else {
         error.value = InputError();
       }
-      controller.value = InputData(value: value, error: error.value.isInError());
+      if (onChange != null) onChange!(InputData(value: value, error: error.value.isInError()));
     }
 
     return TextField(

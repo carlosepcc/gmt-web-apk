@@ -10,21 +10,17 @@ class Axios {
 
   get _dio => Dio(BaseOptions(baseUrl: _url));
 
-  post({required String path, required dynamic data, bool authorization = true}) async {
-    if (authorization) {
-      final prefs = await SharedPreferences.getInstance();
-      String? jwt = prefs.getString("jwt");
-      if (jwt != null) {
-        if (JwtDecoder.isExpired(jwt)) {
-          throw Exception("Token expired");
-        }
-        return await _dio.post(path, data: data, options: Options(headers: {"Authorization": jwt}));
-      }
-    }
-    return await _dio.post(path, data: data);
+  post<T>({required String path, required dynamic data, bool authorization = true}) async {
+    Options? options = await _getOptionToken(authorization);
+    return await _dio.post(path, data: data, options: options);
   }
 
   get<T>({required String path, bool authorization = true}) async {
+    Options? options = await _getOptionToken(authorization);
+    return await _dio.get<T>(path, options: options);
+  }
+
+  Future<Options?> _getOptionToken(bool authorization) async {
     if (authorization) {
       final prefs = await SharedPreferences.getInstance();
       String? jwt = prefs.getString("jwt");
@@ -32,9 +28,9 @@ class Axios {
         if (JwtDecoder.isExpired(jwt)) {
           throw Exception("Token expired");
         }
-        return await _dio.get<T>(path, options: Options(headers: {"Authorization": jwt}));
+        return Options(headers: {"Authorization": jwt});
       }
     }
-    return await _dio.get<T>(path);
+    return null;
   }
 }

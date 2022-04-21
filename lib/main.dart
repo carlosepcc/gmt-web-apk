@@ -9,7 +9,7 @@ void main() => runApp(MultiProvider(
       providers: [
         Provider<Session>(create: (_) => Session()),
         Provider<FloatButtonStore>(create: (_) => FloatButtonStore()),
-        Provider<LocalStore>(create: (_) => LocalStore())
+        Provider<LocalStore>(create: (_) => LocalStore()),
       ],
       child: App(),
     ));

@@ -1,71 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:gmt/app/component/button.dart';
 
-VoidCallback showFormAddDialog(BuildContext context,
-        {required List<Widget> children, Future<bool> Function({required BuildContext context})? addFunction}) =>
-    () => showAnimatedDialog(
-        context: context,
-        barrierDismissible: true,
-        animationType: DialogTransitionType.slideFromTop,
-        builder: (_) => _FormAdd(
-              children: children,
-              addFunction: addFunction,
-            ));
+VoidCallback showDialogTop(BuildContext context, {required Widget body}) => () => showAnimatedDialog(
+    context: context, barrierDismissible: true, animationType: DialogTransitionType.slideFromTop, builder: (_) => _DialogTop(body: body));
 
-class _FormAdd extends HookWidget {
-  _FormAdd({Key? key, required this.children, this.addFunction}) : super(key: key);
+class _DialogTop extends StatelessWidget {
+  _DialogTop({Key? key, required this.body}) : super(key: key);
 
-  final List<Widget> children;
-
-  final Future<bool> Function({required BuildContext context})? addFunction;
+  final Widget body;
 
   @override
   Widget build(BuildContext context) {
-    VoidCallback? getFunction() {
-      if (addFunction != null) {
-        return () {
-          addFunction!(context: context);
-        };
-      }
-      return null;
-    }
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
           decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
           width: 300,
-          child: Column(
-            children: [
-              Material(
-                child: Column(
-                  children: children,
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(onPressed: getFunction(), child: Text("Aceptar")),
-                  )),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                        style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text("Cancelar")),
-                  ))
-                ],
-              )
-            ],
+          padding: EdgeInsets.only(bottom: 8),
+          child: Material(
+            child: Column(
+              children: [body],
+            ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class DialogButtons extends StatelessWidget {
+  const DialogButtons({Key? key, required this.addButton}) : super(key: key);
+
+  final AddButton addButton;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Padding(padding: const EdgeInsets.all(10.0), child: addButton)),
+        Expanded(
+            child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar")),
+        ))
       ],
     );
   }

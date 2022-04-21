@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:gmt/app/component/button.dart';
 import 'package:gmt/app/component/dialog.dart';
 import 'package:gmt/app/component/input.dart';
 import 'package:gmt/app/store/float_button_store/float_button_store.dart';
-import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import '../store/local/local_store.dart';
@@ -28,18 +28,11 @@ class Local extends HookWidget {
     final store = Provider.of<LocalStore>(context);
     final floatButton = Provider.of<FloatButtonStore>(context);
 
-    final numberC = useState<InputData>(InputData(value: "", error: false));
-
-    var showFormDialog = showFormAddDialog(context, addFunction: store.list, children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InputNumber(controller: numberC),
-      )
-    ]);
+    var showFormDialog = showDialogTop(context, body: _LocalForm());
 
     useEffect(() {
       floatButton.action = showFormDialog;
-      store.list(context: context);
+      store.list(context);
       return () {};
     }, []);
 
@@ -71,5 +64,32 @@ class Local extends HookWidget {
         );
       },
     ));
+  }
+}
+
+class _LocalForm extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final store = Provider.of<LocalStore>(context);
+    final username = useState<InputData>(InputData(error: true));
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: Text("Nuevo Local", textScaleFactor: 2),
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: InputNumber(
+            onChange: (data) => username.value = data,
+          ),
+        ),
+        DialogButtons(
+            addButton: AddButton(
+          onPressed: !username.value.error ? store.save(context, username: username.value.value) : null,
+          popNavigator: true,
+        ))
+      ],
+    );
   }
 }

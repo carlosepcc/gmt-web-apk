@@ -15,7 +15,7 @@ class Login extends HookWidget {
     var password = useState<InputData>(InputData(error: true));
     var circularProgressIndicator = useState<bool>(false);
 
-    VoidCallback? submit() {
+    submit() {
       if (!username.value.error && !password.value.error) {
         return () {
           session.login(username: username.value.value, password: password.value.value, context: context).then((value) {
@@ -43,10 +43,12 @@ class Login extends HookWidget {
                       padding: EdgeInsets.symmetric(horizontal: 50),
                       margin: EdgeInsets.only(top: 30, bottom: 5),
                       child: InputUsername(
-                        controller: username,
+                        onChange: (data) => username.value = data,
                       )),
                   Container(
-                      height: 70, padding: EdgeInsets.symmetric(horizontal: 50), child: InputPassword(controller: password, onEnterPress: submit())),
+                      height: 70,
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      child: InputPassword(onChange: (data) => password.value = data, onEnterPress: submit())),
                   Padding(
                     padding: EdgeInsets.only(left: 50, right: 50, top: 30),
                     child: ElevatedButton(

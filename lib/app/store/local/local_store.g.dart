@@ -27,8 +27,22 @@ mixin _$LocalStore on _LocalStore, Store {
   final _$listAsyncAction = AsyncAction('_LocalStore.list');
 
   @override
-  Future<bool> list({required BuildContext context}) {
-    return _$listAsyncAction.run(() => super.list(context: context));
+  Future<bool> list(BuildContext context) {
+    return _$listAsyncAction.run(() => super.list(context));
+  }
+
+  final _$_LocalStoreActionController = ActionController(name: '_LocalStore');
+
+  @override
+  Future<bool> Function() save(BuildContext context,
+      {required String username}) {
+    final _$actionInfo =
+        _$_LocalStoreActionController.startAction(name: '_LocalStore.save');
+    try {
+      return super.save(context, username: username);
+    } finally {
+      _$_LocalStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
