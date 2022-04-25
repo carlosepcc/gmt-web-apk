@@ -38,16 +38,16 @@ abstract class _Session with Store {
     if (jwt != null) username = JwtDecoder.decode(jwt as String)["sub"];
   }
 
-  Future<bool> login({required String username, required String password, required BuildContext context}) async {
-    try {
-      Response response = await _axios.post(path: "/login", data: {"username": username, "password": password}, authorization: false);
-      init(token: response.data as String);
-    } on DioError catch (e) {
-      showSnackBar(context, error: e);
-      return false;
-    }
-    return true;
-  }
+  Future<bool> Function() login({required String username, required String password, required BuildContext context}) => () async {
+        try {
+          Response response = await _axios.post(path: "/login", data: {"username": username, "password": password}, authorization: false);
+          init(token: response.data as String);
+        } on DioError catch (e) {
+          showSnackBar(context, error: e);
+          return false;
+        }
+        return true;
+      };
 
   logout() async {
     final SharedPreferences prefs = await _prefs;

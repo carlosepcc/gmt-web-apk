@@ -57,16 +57,17 @@ class InputPassword extends HookWidget {
       ),
       onChanged: validate,
       onFieldSubmitted: (text) {
-        onEnterPress!();
+        if (onEnterPress != null) onEnterPress!();
       },
     );
   }
 }
 
 class InputUsername extends HookWidget {
-  InputUsername({Key? key, this.onChange}) : super(key: key);
+  InputUsername({Key? key, this.onChange, this.onEnterPress}) : super(key: key);
 
   final Function(InputData inputData)? onChange;
+  final VoidCallback? onEnterPress;
 
   @override
   Widget build(BuildContext context) {
@@ -94,14 +95,18 @@ class InputUsername extends HookWidget {
       keyboardType: TextInputType.name,
       decoration: InputDecoration(labelText: "Usuario", errorText: error.value.message),
       onChanged: validate,
+      onFieldSubmitted: (text) {
+        if (onEnterPress != null) onEnterPress!();
+      },
     );
   }
 }
 
 class InputNumber extends HookWidget {
-  InputNumber({Key? key, this.onChange}) : super(key: key);
+  InputNumber({Key? key, this.onChange, this.onEnterPress}) : super(key: key);
 
   final Function(InputData inputData)? onChange;
+  final VoidCallback? onEnterPress;
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +123,15 @@ class InputNumber extends HookWidget {
       if (onChange != null) onChange!(InputData(value: value, error: error.value.isInError()));
     }
 
-    return TextField(
+    return TextFormField(
       autofocus: true,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(labelText: "Numero", errorText: error.value.message),
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onChanged: validate,
+      onFieldSubmitted: (text) {
+        if (onEnterPress != null) onEnterPress!();
+      },
     );
   }
 }

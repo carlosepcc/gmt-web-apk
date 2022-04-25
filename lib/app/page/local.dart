@@ -19,11 +19,6 @@ class Local extends HookWidget {
           height: 170,
           child: Column(
             children: [
-              Expanded(
-                child: Center(
-                  child: Text(text),
-                ),
-              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -37,7 +32,13 @@ class Local extends HookWidget {
                         color: Colors.red,
                       ))
                 ],
-              )
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 40),
+                  child: Text(text),
+                ),
+              ),
             ],
           ),
         ),
