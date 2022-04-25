@@ -16,9 +16,29 @@ class Local extends HookWidget {
         elevation: 3,
         child: SizedBox(
           width: 150,
-          height: 200,
-          child: Center(
-            child: Text(text),
+          height: 170,
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Text(text),
+                ),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  IconButton(
+                      onPressed: () {},
+                      splashRadius: 20,
+                      tooltip: "Eliminar Local",
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ))
+                ],
+              )
+            ],
           ),
         ),
       );
@@ -32,8 +52,9 @@ class Local extends HookWidget {
 
     useEffect(() {
       floatButton.action = showFormDialog;
+      floatButton.state = FloatButtonState.add;
       store.list(context);
-      return () {};
+      return null;
     }, []);
 
     return Expanded(child: Observer(

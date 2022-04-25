@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:gmt/app/store/float_button_store/float_button_store.dart';
 import 'package:gmt/app/store/session/session.dart';
 import 'package:provider/provider.dart';
 
-class Option extends StatelessWidget {
+class Option extends HookWidget {
   const Option({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var session = Provider.of<Session>(context);
+    final floatButtonStore = Provider.of<FloatButtonStore>(context);
+
+    useEffect(() {
+      floatButtonStore.state = FloatButtonState.none;
+      return null;
+    }, []);
 
     return Expanded(
       child: Column(

@@ -22,9 +22,7 @@ class FloatButton extends StatelessWidget {
           child: Tooltip(message: "Modificar", child: Icon(Icons.update)),
         );
       default:
-        return FloatingActionButton(
-          onPressed: null,
-        );
+        return Container();
     }
   }
 }

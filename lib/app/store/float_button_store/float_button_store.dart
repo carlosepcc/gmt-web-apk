@@ -13,4 +13,4 @@ abstract class _FloatButtonStore with Store {
   VoidCallback action = () {};
 }
 
-enum FloatButtonState { add, update }
+enum FloatButtonState { add, update, none }
