@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gmt/app/store/float_button_store/float_button_store.dart';
 import 'package:provider/provider.dart';
 
-class Home extends HookWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends HookWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

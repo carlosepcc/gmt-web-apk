@@ -28,9 +28,9 @@ abstract class _LocalStore with Store {
   }
 
   @action
-  Future<bool> Function() save(BuildContext context, {required String username}) => () async {
+  Future<bool> Function() save(BuildContext context, {required String number}) => () async {
         try {
-          Response response = await _axios.post(path: "/local", data: {"number": username});
+          Response response = await _axios.post(path: "/local", data: {"number": number});
           var pivote = locales!;
           pivote.add(Local.request(response.data));
           locales = pivote;
@@ -54,6 +54,22 @@ abstract class _LocalStore with Store {
             }
             return salida;
           });
+          locales = pivote;
+        } on DioError catch (e) {
+          showSnackBar(context, error: e);
+          return false;
+        }
+        return false;
+      };
+
+  @action
+  Future<bool> Function() update(BuildContext context, {required int id, required String number}) => () async {
+        try {
+          Response response = await _axios.put(path: "/local", data: {"id": id, "number": number});
+          var pivote = locales!;
+          var local = Local.request(response.data);
+          int position = pivote.indexWhere((element) => element.id == local.id);
+          pivote[position] = local;
           locales = pivote;
         } on DioError catch (e) {
           showSnackBar(context, error: e);

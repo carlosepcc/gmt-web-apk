@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
-import 'package:gmt/app/component/button.dart';
 
 VoidCallback showDialogTop(BuildContext context, {required Widget body}) => () => showAnimatedDialog(
     context: context, barrierDismissible: true, animationType: DialogTransitionType.slideFromTop, builder: (_) => _DialogTop(body: body));
@@ -33,7 +32,7 @@ class _DialogTop extends StatelessWidget {
 class DialogButtons extends StatelessWidget {
   const DialogButtons({Key? key, required this.addButton}) : super(key: key);
 
-  final AddButton addButton;
+  final Widget? addButton;
 
   @override
   Widget build(BuildContext context) {

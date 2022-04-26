@@ -4,8 +4,8 @@ import 'package:gmt/app/store/float_button_store/float_button_store.dart';
 import 'package:gmt/app/store/session/session.dart';
 import 'package:provider/provider.dart';
 
-class Option extends HookWidget {
-  const Option({Key? key}) : super(key: key);
+class OptionPage extends HookWidget {
+  const OptionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

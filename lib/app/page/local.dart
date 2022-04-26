@@ -9,10 +9,10 @@ import 'package:provider/provider.dart';
 
 import '../store/local/local_store.dart';
 
-class Local extends HookWidget {
-  Local({Key? key}) : super(key: key);
+class LocalPage extends HookWidget {
+  LocalPage({Key? key}) : super(key: key);
 
-  Widget _myCard({required String text, required VoidCallback onClickDelete}) => Card(
+  Widget _myCard({required String text, required VoidCallback onClickDelete, required VoidCallback onClickChange}) => Card(
         elevation: 3,
         child: SizedBox(
           width: 150,
@@ -23,6 +23,13 @@ class Local extends HookWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Spacer(),
+                  IconButton(
+                    onPressed: onClickChange,
+                    splashRadius: 20,
+                    tooltip: "Modificar Local",
+                    icon: Icon(Icons.edit),
+                    color: Colors.blue,
+                  ),
                   IconButton(
                       onPressed: onClickDelete,
                       splashRadius: 20,
@@ -49,12 +56,23 @@ class Local extends HookWidget {
     final store = Provider.of<LocalStore>(context);
     final floatButton = Provider.of<FloatButtonStore>(context);
 
-    var showFormDialog = showDialogTop(context, body: _LocalForm());
+    var showFormDialogAdd = showDialogTop(context,
+        body: _LocalForm(
+          action: _LocalFormAction.add,
+        ));
+
+    VoidCallback showFormDialogUpdate(Local local) => showDialogTop(context,
+        body: _LocalForm(
+          action: _LocalFormAction.update,
+          local: local,
+        ));
 
     useEffect(() {
-      floatButton.action = showFormDialog;
+      floatButton.action = showFormDialogAdd;
       floatButton.state = FloatButtonState.add;
-      store.list(context);
+      if (store.locales == null) {
+        store.list(context);
+      }
       return null;
     }, []);
 
@@ -82,7 +100,10 @@ class Local extends HookWidget {
                     spacing: 5,
                     runSpacing: 5,
                     children: store.locales!
-                        .map((local) => _myCard(text: local.number.toString(), onClickDelete: store.delete(context, ids: [local.id])))
+                        .map((local) => _myCard(
+                            text: local.number.toString(),
+                            onClickDelete: store.delete(context, ids: [local.id]),
+                            onClickChange: showFormDialogUpdate(local)))
                         .toList()));
           },
         );
@@ -92,28 +113,84 @@ class Local extends HookWidget {
 }
 
 class _LocalForm extends HookWidget {
+  _LocalForm({Key? key, required this.action, this.local}) : super(key: key);
+
+  final _LocalFormAction action;
+  final Local? local;
+
   @override
   Widget build(BuildContext context) {
     final store = Provider.of<LocalStore>(context);
-    final username = useState<InputData>(InputData(error: true));
+    final number = useState<InputData>(InputData(error: action != _LocalFormAction.update));
+    final circularIndicador = useState(false);
+
+    bool valid = number.value.error;
+
+    VoidCallback onEnter() => () {
+          if (!valid) {
+            circularIndicador.value = true;
+            if (action == _LocalFormAction.update && local != null) {
+              store.update(context, id: local!.id, number: number.value.value)().then((value) {
+                Navigator.of(context).pop();
+                circularIndicador.value = false;
+              });
+            } else {
+              store.save(context, number: number.value.value)().then((value) {
+                Navigator.of(context).pop();
+                circularIndicador.value = false;
+              });
+            }
+          }
+        };
+
+    Widget? getAddButton(bool valid) {
+      if (action == _LocalFormAction.update && local != null) {
+        return AddButton(
+          onPressed: valid ? null : store.update(context, id: local!.id, number: number.value.value),
+          popNavigator: true,
+        );
+      } else {
+        return AddButton(
+          onPressed: !valid ? store.save(context, number: number.value.value) : null,
+          popNavigator: true,
+        );
+      }
+      return null;
+    }
+
+    String? getDefaultValue() {
+      if (action == _LocalFormAction.update && local != null) {
+        return local!.number.toString();
+      }
+      return null;
+    }
+
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 2),
-          child: Text("Nuevo Local", textScaleFactor: 2),
+          child: Text(action == _LocalFormAction.add ? "Nuevo Local" : "Modificar Local", textScaleFactor: 2),
         ),
         Padding(
           padding: EdgeInsets.all(10),
           child: InputNumber(
-            onChange: (data) => username.value = data,
+            defaultValue: getDefaultValue(),
+            error: number.value.error,
+            onChange: (data) => number.value = data,
+            onEnterPress: onEnter(),
           ),
         ),
         DialogButtons(
-            addButton: AddButton(
-          onPressed: !username.value.error ? store.save(context, username: username.value.value) : null,
-          popNavigator: true,
-        ))
+            addButton: !circularIndicador.value
+                ? getAddButton(valid)
+                : SizedBox(
+                    child: AddButton(
+                      circularIndicador: true,
+                    ),
+                  ))
       ],
     );
   }
 }
+
+enum _LocalFormAction { add, update }

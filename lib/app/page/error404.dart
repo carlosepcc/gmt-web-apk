@@ -5,8 +5,8 @@ import 'package:gmt/app/store/session/session.dart';
 import 'package:provider/provider.dart';
 import 'package:vrouter/vrouter.dart';
 
-class Error404 extends StatelessWidget {
-  const Error404({Key? key}) : super(key: key);
+class Error404Page extends StatelessWidget {
+  const Error404Page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,29 @@
+name: deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v1
+      with:
+       channel: 'dev'
+    - name: 'Run flutter pub get'
+      run: flutter pub get
+    - name: Enable flutter web
+      run: flutter config --enable-web
+    - name: 'Build Web App'
+      run: flutter build web
+    - uses: amondnet/vercel-action@v20 #deploy
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+        vercel-org-id: ${{ secrets.ORG_ID}}  #Required
+        vercel-project-id: ${{ secrets.PROJECT_ID}} #Required
+        vercel-args: '--prod'
+        working-directory: ./build/web/

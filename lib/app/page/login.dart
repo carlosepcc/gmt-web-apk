@@ -17,7 +17,7 @@ class Login extends HookWidget {
 
     bool valid = username.value.error || password.value.error;
 
-    onEnter() => () {
+    VoidCallback onEnter() => () {
           if (!valid) {
             circularIndicador.value = true;
             session

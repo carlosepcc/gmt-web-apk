@@ -103,14 +103,16 @@ class InputUsername extends HookWidget {
 }
 
 class InputNumber extends HookWidget {
-  InputNumber({Key? key, this.onChange, this.onEnterPress}) : super(key: key);
+  InputNumber({Key? key, this.onChange, this.onEnterPress, this.defaultValue, this.error = false}) : super(key: key);
 
   final Function(InputData inputData)? onChange;
   final VoidCallback? onEnterPress;
+  final String? defaultValue;
+  final bool error;
 
   @override
   Widget build(BuildContext context) {
-    final error = useState<InputError>(InputError(message: "No puede estar vacío"));
+    final error = useState<InputError>(InputError(message: this.error ? "No puede estar vacío" : null));
 
     void validate(String value) {
       if (value.isEmpty) {
@@ -129,6 +131,7 @@ class InputNumber extends HookWidget {
       decoration: InputDecoration(labelText: "Numero", errorText: error.value.message),
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onChanged: validate,
+      initialValue: defaultValue,
       onFieldSubmitted: (text) {
         if (onEnterPress != null) onEnterPress!();
       },

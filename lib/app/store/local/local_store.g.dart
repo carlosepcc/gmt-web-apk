@@ -34,12 +34,11 @@ mixin _$LocalStore on _LocalStore, Store {
   final _$_LocalStoreActionController = ActionController(name: '_LocalStore');
 
   @override
-  Future<bool> Function() save(BuildContext context,
-      {required String username}) {
+  Future<bool> Function() save(BuildContext context, {required String number}) {
     final _$actionInfo =
         _$_LocalStoreActionController.startAction(name: '_LocalStore.save');
     try {
-      return super.save(context, username: username);
+      return super.save(context, number: number);
     } finally {
       _$_LocalStoreActionController.endAction(_$actionInfo);
     }
@@ -52,6 +51,18 @@ mixin _$LocalStore on _LocalStore, Store {
         _$_LocalStoreActionController.startAction(name: '_LocalStore.delete');
     try {
       return super.delete(context, ids: ids);
+    } finally {
+      _$_LocalStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<bool> Function() update(BuildContext context,
+      {required int id, required String number}) {
+    final _$actionInfo =
+        _$_LocalStoreActionController.startAction(name: '_LocalStore.update');
+    try {
+      return super.update(context, id: id, number: number);
     } finally {
       _$_LocalStoreActionController.endAction(_$actionInfo);
     }

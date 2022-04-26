@@ -25,6 +25,11 @@ class Axios {
     return await _dio.delete<T>(path, data: data, options: options);
   }
 
+  put<T>({required String path, dynamic data, bool authorization = true}) async {
+    Options? options = await _getOptionToken(authorization);
+    return await _dio.put<T>(path, data: data, options: options);
+  }
+
   Future<Options?> _getOptionToken(bool authorization) async {
     if (authorization) {
       final prefs = await SharedPreferences.getInstance();
