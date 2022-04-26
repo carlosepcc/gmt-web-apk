@@ -12,7 +12,7 @@ import '../store/local/local_store.dart';
 class Local extends HookWidget {
   Local({Key? key}) : super(key: key);
 
-  Widget _myCard({required String text}) => Card(
+  Widget _myCard({required String text, required VoidCallback onClickDelete}) => Card(
         elevation: 3,
         child: SizedBox(
           width: 150,
@@ -24,7 +24,7 @@ class Local extends HookWidget {
                 children: [
                   Spacer(),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: onClickDelete,
                       splashRadius: 20,
                       tooltip: "Eliminar Local",
                       icon: Icon(
@@ -81,7 +81,9 @@ class Local extends HookWidget {
                     alignment: WrapAlignment.center,
                     spacing: 5,
                     runSpacing: 5,
-                    children: store.locales!.map((e) => _myCard(text: e.number.toString())).toList()));
+                    children: store.locales!
+                        .map((local) => _myCard(text: local.number.toString(), onClickDelete: store.delete(context, ids: [local.id])))
+                        .toList()));
           },
         );
       },

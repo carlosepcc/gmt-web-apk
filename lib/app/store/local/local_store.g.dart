@@ -46,6 +46,18 @@ mixin _$LocalStore on _LocalStore, Store {
   }
 
   @override
+  Future<bool> Function() delete(BuildContext context,
+      {required List<int> ids}) {
+    final _$actionInfo =
+        _$_LocalStoreActionController.startAction(name: '_LocalStore.delete');
+    try {
+      return super.delete(context, ids: ids);
+    } finally {
+      _$_LocalStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 locales: ${locales}

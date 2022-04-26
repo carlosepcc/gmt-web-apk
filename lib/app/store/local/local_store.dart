@@ -40,14 +40,36 @@ abstract class _LocalStore with Store {
         }
         return true;
       };
+
+  @action
+  Future<bool> Function() delete(BuildContext context, {required List<int> ids}) => () async {
+        try {
+          Response<List> response = await _axios.delete<List>(path: "/local", data: ids);
+          var pivote = locales!;
+          pivote.removeWhere((local) {
+            bool salida = false;
+            for (var id in response.data!) {
+              if (salida) return salida;
+              salida = id == local.id;
+            }
+            return salida;
+          });
+          locales = pivote;
+        } on DioError catch (e) {
+          showSnackBar(context, error: e);
+          return false;
+        }
+        return false;
+      };
 }
 
 class Local {
+  final int id;
   final int number;
 
-  Local({required this.number});
+  Local({required this.number, required this.id});
 
-  Local.request(dynamic local) : this(number: local["number"]);
+  Local.request(dynamic local) : this(number: local["number"], id: local["id"]);
 
   @override
   String toString() {
